@@ -21,14 +21,14 @@ func validateTree(tree *ast.Expr) error {
 		return ErrEmpty
 	}
 	if err := ast.Validate(tree); err != nil {
-		return fmt.Errorf("%v: %v", ErrInvalid, err)
+		return fmt.Errorf("%w: %v", ErrInvalid, err)
 	}
 	if ast.HasDayConflict(tree) {
 		return ErrConflict
 	}
 	for _, f := range tree.Fields {
 		if f.Raw == "" {
-			return fmt.Errorf("%v: missing raw field", ErrInvalid)
+			return fmt.Errorf("%w: missing raw field", ErrInvalid)
 		}
 	}
 	return nil
@@ -38,7 +38,7 @@ func validateTree(tree *ast.Expr) error {
 func ValidateFields(spec string) error {
 	parts := strings.Fields(strings.TrimSpace(spec))
 	if len(parts) != 5 && len(parts) != 6 {
-		return fmt.Errorf("%v: expected 5 or 6 fields, got %d", ErrInvalid, len(parts))
+		return fmt.Errorf("%w: expected 5 or 6 fields, got %d", ErrInvalid, len(parts))
 	}
 	return Validate(spec)
 }
